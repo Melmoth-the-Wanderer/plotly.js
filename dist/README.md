@@ -75,7 +75,7 @@ The main plotly.js bundle weights in at:
 
 | plotly.js | plotly.min.js | plotly.min.js + gzip | plotly-with-meta.js |
 |-----------|---------------|----------------------|---------------------|
-| 5.8 MB | 2.7 MB | 818.5 kB | 6.1 MB |
+| 5.9 MB | 2.7 MB | 818.5 kB | 6.1 MB |
 
 ## Partial bundles
 
@@ -190,7 +190,7 @@ The `geo` partial bundle contains trace modules `scatter`, `scattergeo` and `cho
 
 | Raw size | Minified size | Minified + gzip size |
 |------|-----------------|------------------------|
-| 2.2 MB | 797.9 kB | 262.9 kB |
+| 2.3 MB | 797.9 kB | 262.9 kB |
 
 #### CDN links
 
@@ -328,7 +328,7 @@ The `mapbox` partial bundle contains trace modules `scatter` and `scattermapbox`
 
 | Raw size | Minified size | Minified + gzip size |
 |------|-----------------|------------------------|
-| 2.7 MB | 1.3 MB | 400.7 kB |
+| 2.8 MB | 1.3 MB | 400.7 kB |
 
 #### CDN links
 
