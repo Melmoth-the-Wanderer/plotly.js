@@ -75,7 +75,7 @@ The main plotly.js bundle weights in at:
 
 | plotly.js | plotly.min.js | plotly.min.js + gzip | plotly-with-meta.js |
 |-----------|---------------|----------------------|---------------------|
-| 5.9 MB | 2.7 MB | 818.5 kB | 6.1 MB |
+| 5.9 MB | 2.7 MB | 825.2 kB | 6.1 MB |
 
 ## Partial bundles
 
@@ -236,7 +236,7 @@ The `gl3d` partial bundle contains trace modules `scatter`, `scatter3d`, `surfac
 
 | Raw size | Minified size | Minified + gzip size |
 |------|-----------------|------------------------|
-| 3.3 MB | 1.3 MB | 410 kB |
+| 3.3 MB | 1.3 MB | 415.7 kB |
 
 #### CDN links
 
