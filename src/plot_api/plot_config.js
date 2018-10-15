@@ -58,7 +58,7 @@ module.exports = {
     autosizable: false,
 
     // responsive: determines whether to change the layout size when window is resized
-    responsive: false,
+    responsive: true,
 
     // set the length of the undo/redo queue
     queueLength: 0,

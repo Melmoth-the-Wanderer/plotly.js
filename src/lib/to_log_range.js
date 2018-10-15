@@ -15,6 +15,14 @@ var isNumeric = require('fast-isnumeric');
  * the given range
  */
 module.exports = function toLogRange(val, range) {
+    if (val === 0) return 0;
+    const sign = val < 0 ? -1 : 1;
+    const absVal = Math.abs(val);
+    const log10Val = Math.log(absVal) / Math.LN10;
+    return sign * log10Val;
+
+
+
     if(val > 0) return Math.log(val) / Math.LN10;
 
     // move a negative value reference to a log axis - just put the

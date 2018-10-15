@@ -851,7 +851,24 @@ axes.tickIncrement = function(x, dtick, axrev, calendar) {
     if(tType === 'M') return Lib.incrementMonth(x, dtSigned, calendar);
 
     // Log scales: Linear, Digits
-    else if(tType === 'L') return Math.log(Math.pow(10, x) + dtSigned) / Math.LN10;
+    else if (tType === 'L') {
+
+        function fromLog(v) {
+            if (v === 0) {
+                return 0;
+            }
+            let sign = 1;
+            if (v < 0) {
+                sign = -1;
+                v = Math.abs(v);
+            }
+            return Math.pow(10, v) * sign;
+        }
+        const value = fromLog(x) + dtSigned;
+        let valueSign = value < 0 ? -1 : 1;
+
+        return Math.log(Math.abs(value)) / Math.LN10 * valueSign;
+    }
 
     // log10 of 2,5,10, or all digits (logs just have to be
     // close enough to round)
@@ -919,8 +936,22 @@ axes.tickFirst = function(ax) {
 
     // Log scales: Linear, Digits
     else if(tType === 'L') {
-        return Math.log(sRound(
-            (Math.pow(10, r0) - tick0) / dtNum) * dtNum + tick0) / Math.LN10;
+
+        function fromLog(v) {
+            if(v === 0) {
+                return 0;
+            }
+            let sign = 1;
+            if(v < 0) {
+                sign = -1;
+                v = Math.abs(v);
+            }
+            return Math.pow(10, v) * sign;
+        }
+        const value = sRound((fromLog(r0) - tick0) / dtNum) * dtNum + tick0;
+        let sign = value < 0 ? -1 : 1;
+        
+        return (Math.log(Math.abs(value)) / Math.LN10) * sign;
     }
     else if(tType === 'D') {
         var tickset = (dtick === 'D2') ? roundLog2 : roundLog1,
@@ -1113,8 +1144,20 @@ function formatLog(ax, out, hover, extraPrecision, hideexp) {
         dtChar0 = 'L';
     }
 
-    if(tickformat || (dtChar0 === 'L')) {
-        out.text = numFormat(Math.pow(10, x), ax, hideexp, extraPrecision);
+    if (tickformat || (dtChar0 === 'L')) {
+
+        function fromLog(v) {
+            if (v === 0) {
+                return 0;
+            }
+            let sign = 1;
+            if (v < 0) {
+                sign = -1;
+                v = Math.abs(v);
+            }
+            return Math.pow(10, v) * sign;
+        }
+        out.text = numFormat(fromLog(x), ax, hideexp, extraPrecision);
     }
     else if(isNumeric(dtick) || ((dtChar0 === 'D') && (Lib.mod(x + 0.01, 1) < 0.1))) {
         var p = Math.round(x);

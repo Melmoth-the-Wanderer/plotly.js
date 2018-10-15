@@ -27,7 +27,15 @@ var constants = require('./constants');
 var axisIds = require('./axis_ids');
 
 function fromLog(v) {
-    return Math.pow(10, v);
+    if(v === 0) {
+        return 0;
+    }
+    let sign = 1;
+    if(v < 0) {
+        sign = -1;
+        v = Math.abs(v);
+    }
+    return Math.pow(10, v) * sign;
 }
 
 /**
@@ -61,6 +69,13 @@ module.exports = function setConvert(ax, fullLayout) {
     var axLetter = (ax._id || 'x').charAt(0);
 
     function toLog(v, clip) {
+        if (v === 0) { return 0; }
+        const sign = v < 0 ? -1 : 1;
+        const result = ((Math.log(Math.abs(v))) / Math.LN10) * sign;
+        return result;
+
+
+        
         if(v > 0) return Math.log(v) / Math.LN10;
 
         else if(v <= 0 && clip && ax.range && ax.range.length === 2) {
