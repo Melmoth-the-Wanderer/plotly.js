@@ -14,14 +14,15 @@ var isNumeric = require('fast-isnumeric');
  * convert a linear value into a logged value, folding negative numbers into
  * the given range
  */
+//this will probably stay as in master.
+// toSymlogRange will be introduced when symlog axis is present
 module.exports = function toLogRange(val, range) {
     if (val === 0) return 0;
     const sign = val < 0 ? -1 : 1;
     const absVal = Math.abs(val);
     const log10Val = Math.log(absVal) / Math.LN10;
+
     return sign * log10Val;
-
-
 
     if(val > 0) return Math.log(val) / Math.LN10;
 

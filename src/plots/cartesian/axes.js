@@ -718,6 +718,18 @@ axes.autoTicks = function(ax, roughDTick) {
         if(roughDTick > 0.7) {
             // only show powers of 10
             ax.dtick = Math.ceil(roughDTick);
+
+
+            //pdtec mod
+            
+            
+            // span is less than one power of 10
+            var nt = 1.5 * Math.abs((rng[1] - rng[0]) / roughDTick);
+            // ticks on a linear scale, labeled fully
+            roughDTick = Math.abs(Math.pow(10, rng[1]) -
+                Math.pow(10, rng[0])) / nt;
+            base = getBase(10);
+            ax.dtick = 'L' + roundDTick(roughDTick, base, roundBase10);
         }
         else if(Math.abs(rng[1] - rng[0]) < 1) {
             // span is less than one power of 10
@@ -865,9 +877,14 @@ axes.tickIncrement = function(x, dtick, axrev, calendar) {
             return Math.pow(10, v) * sign;
         }
         const value = fromLog(x) + dtSigned;
+        const valueAbs = Math.abs(value);
+        if(valueAbs < 1) {
+            
+            return value;
+        }
         let valueSign = value < 0 ? -1 : 1;
 
-        return Math.log(Math.abs(value)) / Math.LN10 * valueSign;
+        return Math.log(valueAbs) / Math.LN10 * valueSign;
     }
 
     // log10 of 2,5,10, or all digits (logs just have to be
@@ -1039,7 +1056,8 @@ axes.hoverLabelText = function(ax, val, val2) {
         return axes.hoverLabelText(ax, val) + ' - ' + axes.hoverLabelText(ax, val2);
     }
 
-    var logOffScale = (ax.type === 'log' && val <= 0);
+    //gdy dodamy nowy typ osi "symlog" logika 'logOffScale' będzie ok - można będzie go przywrócić.
+    var logOffScale = false;// (ax.type === 'log' && val <= 0);
     var tx = axes.tickText(ax, ax.c2l(logOffScale ? -val : val), 'hover').text;
 
     if(logOffScale) {
@@ -1144,19 +1162,19 @@ function formatLog(ax, out, hover, extraPrecision, hideexp) {
         dtChar0 = 'L';
     }
 
-    if (tickformat || (dtChar0 === 'L')) {
-
-        function fromLog(v) {
-            if (v === 0) {
-                return 0;
-            }
-            let sign = 1;
-            if (v < 0) {
-                sign = -1;
-                v = Math.abs(v);
-            }
-            return Math.pow(10, v) * sign;
+    function fromLog(v) {
+        if (v === 0) {
+            return 0;
         }
+        let sign = 1;
+        if (v < 0) {
+            sign = -1;
+            v = Math.abs(v);
+        }
+        return Math.pow(10, v) * sign;
+    }
+    
+    if (tickformat || (dtChar0 === 'L')) {
         out.text = numFormat(fromLog(x), ax, hideexp, extraPrecision);
     }
     else if(isNumeric(dtick) || ((dtChar0 === 'D') && (Lib.mod(x + 0.01, 1) < 0.1))) {
@@ -1174,7 +1192,7 @@ function formatLog(ax, out, hover, extraPrecision, hideexp) {
             out.text = '1' + exponentFormat + (p > 0 ? '+' : MINUS_SIGN) + absP;
         }
         else {
-            out.text = numFormat(Math.pow(10, x), ax, '', 'fakehover');
+            out.text = numFormat(fromLog(x), ax, '', 'fakehover');
             if(dtick === 'D1' && ax._id.charAt(0) === 'y') {
                 out.dy -= out.fontSize / 6;
             }

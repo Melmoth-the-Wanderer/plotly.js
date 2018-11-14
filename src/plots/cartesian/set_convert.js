@@ -26,6 +26,7 @@ var LOG_CLIP = numConstants.LOG_CLIP;
 var constants = require('./constants');
 var axisIds = require('./axis_ids');
 
+//this probably will stay as in master, another method will be introduced - fromSymlog() when 'symlog' axis type is introduced
 function fromLog(v) {
     if(v === 0) {
         return 0;
@@ -69,12 +70,19 @@ module.exports = function setConvert(ax, fullLayout) {
     var axLetter = (ax._id || 'x').charAt(0);
 
     function toLog(v, clip) {
-        if (v === 0) { return 0; }
+        if (v === 0) {
+
+            return 0;
+        }
         const sign = v < 0 ? -1 : 1;
-        const result = ((Math.log(Math.abs(v))) / Math.LN10) * sign;
+        const vAbs = Math.abs(v);
+        if (vAbs < 1) {
+
+            return v;
+        }
+        const result = ((Math.log(vAbs)) / Math.LN10) * sign;
+
         return result;
-
-
         
         if(v > 0) return Math.log(v) / Math.LN10;
 
